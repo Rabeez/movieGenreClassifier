@@ -9,7 +9,7 @@ train, test = data.split(movieData, 80)
 print(len(train), 'training data\n', len(test), 'testing data')
 
 # # Create tfidf vectors for all summaries in the training set
-movieVectors = tfidf(train)
+movieVectors = files.gettfidf(train)
 
 # # Convert a test sample into tfidf
 # tfidf()

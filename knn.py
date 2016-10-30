@@ -1,6 +1,6 @@
 import numpy, collections
 
-def knn(data, target, k = 3):
+def kNN(data, target, k = 3):
     if k >= len(data):
         print('K needs to be smaller than number of data points.')
     else:

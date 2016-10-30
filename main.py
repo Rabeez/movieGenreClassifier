@@ -1,9 +1,21 @@
-import files, knn
+import files, data, knn
 
 # Import metadata and summaries' bag of words into separate dictionaries
-movieMetadata, movieSummaries = files.get()
-print(len(movieMetadata), 'movies imported')
+movieData = files.get()
+print(len(movieData), 'movies imported')
 
-# d = {1: [10, 11, 12], 2: [20, 22, 25], 5: [52, 57, 59]}
+# Split data into training/testing sets
+train, test = data.split(movieData, 80)
+print(len(train), 'training data\n', len(test), 'testing data')
 
-# print(knn.knn(d, [5, 7, 9], 2))
+# # Create tfidf vectors for all summaries in the training set
+movieVectors = tfidf(train)
+
+# # Convert a test sample into tfidf
+# tfidf()
+
+# # Apply kNN using cosine similarity
+# kNN()
+
+# # Output predicted genre
+# print()

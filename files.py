@@ -26,7 +26,7 @@ def get():
 
     # Load data from files if they exist
     if metadataFilePath.is_file() and summariesFilePath.is_file() and bagFilePath.is_file():
-        return loadDict(metadataFilePath), loadDict(bagFilePath)
+        return data.combineDict(loadDict(metadataFilePath), loadDict(bagFilePath))
     else:
         # Otherwise import data from the corpus
         movieMetadata = data.getMovieMetadata()
@@ -38,5 +38,5 @@ def get():
         writeDict(movieSummaries, 'summariesDict')
         writeDict(movieSummariesBag, 'summariesBag')
 
-        return movieMetadata, movieSummariesBag
+        return data.combineDict(movieMetadata, movieSummariesBag)
 

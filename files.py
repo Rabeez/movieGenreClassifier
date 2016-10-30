@@ -1,4 +1,4 @@
-import data
+import data, tfidf
 import pathlib, pickle, csv
 
 def writeDict(myDict, filename):
@@ -49,7 +49,7 @@ def gettfidf(trainingSet):
         return loadDict(tfidfFile)
     else:
         # Otherwise create vectors
-        vectors = data.tfidf(trainingSet)
+        vectors = tfidf.tfidf(trainingSet)
         # And write them to the file
         writeDict(vectors, 'tfidf')
 

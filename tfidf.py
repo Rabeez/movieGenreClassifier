@@ -8,8 +8,8 @@ def tfidf(data):
 
     i = 1
     for movieID, movieData in data.items():
-        tfVector = extend(normalize(movieData[2]), data)  # summary bag
-        tfidfVector[movieID] = mult(tfVector, idfVector)
+        tfVector = extend(movieData[2], data)  # summary bag
+        tfidfVector[movieID] = normalize(mult(tfVector, idfVector))
         print(i, ' movie(s) done')
         i+=1
     return tfidfVector
@@ -29,14 +29,19 @@ def normalize(bag):
 
 def idf(data):
     # Calculate idf vector for the dataset
-    out = {}
+    allWordsdf = {}
     for movieID, movieData in data.items():
         for word, freq in movieData[2].items():
-            if word in out:
-                out[word] += 1
-            else:
-                out[word] = 1
-    return {word: 1+math.log(len(data)/freq) for word, freq in out.items()}
+            if not word in allWordsdf:
+                allWordsdf[word] = 0
+
+    for word, freq in allWordsdf.items():
+        for movieID, movieData in data.items():
+            if word in movieData[2]:
+                allWordsdf[word] += 1
+                continue
+
+    return {word: math.log(len(data)/freq) for word, freq in allWordsdf.items()}
 
 def mult(tfVector, idfVector):
     # Return vector with products of corresponding entries in tf and idf vectors

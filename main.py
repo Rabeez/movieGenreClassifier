@@ -17,7 +17,7 @@ count = 0
 for key, val in train.items():
     newTrain[key] = val
     count += 1
-    if count >= 500: break
+    if count >= 100: break
 
 newTest = {}
 count = 0
@@ -30,7 +30,22 @@ trainVectors, testVectors = tfidf.tfidf(newTrain, newTest)
 print(len(trainVectors) + len(testVectors), 'tfidf vectors calculated')
 
 # # Apply kNN using cosine similarity
-# knn.kNN(trainVectors, testVectors)
+genres = {}
+for key in testVectors:
+    k_nearest = knn.kNN(trainVectors, testVectors[key])
+    genres[key] = {}
+    for movieID in k_nearest:
+        temp_genres = movieData[movieID][1]
+        for genre in temp_genres:
+            if genre in genres[key]:
+                genres[key][genre] += 1
+            else:
+                genres[key][genre] = 1
+
+# final_genres = {}
+# for movieID, genreCounts in genres.items():
+#     for genre, count in genreCounts.items():
+#         if count > 1
 
 # # Output predicted genre
-# print()
+print(genres)

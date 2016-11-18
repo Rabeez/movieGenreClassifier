@@ -11,7 +11,7 @@ def tfidf(trainingSet, testingSet):
     for movieID, movieData in trainingSet.items():
         tfVector = extend(movieData[2], trainingSet)  # summary bag
         tfidfVector[movieID] = normalize(mult(tfVector, idfVector))
-        print(i, ' movie(s) done')
+        # print(i, ' movie(s) done')
         i+=1
 
     trainingVectors = { key: value for key, value in tfidfVector.items() if trainingSet[key][-1] == False }

@@ -21,8 +21,8 @@ def kNN(data, target, k=3):
 if __name__ == '__main__':
     dataset = {'b': [ [1, 2], [2, 3], [3, 1] ],
             'r': [ [6, 5], [7, 7], [8, 6] ]}
-    new_point = [3, 7]
+    new_point = [1, 5]
 
-    [ [plt.scatter(ii[0], ii[1], s=100, color=i) for ii in dataset[i]] for i in dataset ]
+    [ [ plt.scatter(ii[0], ii[1], s=100, color=i) for ii in dataset[i] ] for i in dataset ]
     plt.scatter(new_point[0], new_point[1], s=100, marker='*', color=kNN(dataset, new_point))
     plt.show()

@@ -1,18 +1,23 @@
 import math
 
-def tfidf(data):
+def tfidf(trainingSet, testingSet):
     # Calculate tfidf vectors for all movies
+    trainingSet.update(testingSet)
     tfidfVector = {}
-    idfVector = idf(data)
+    idfVector = idf(trainingSet)
     print(len(idfVector), ' unique words')
 
     i = 1
-    for movieID, movieData in data.items():
-        tfVector = extend(movieData[2], data)  # summary bag
+    for movieID, movieData in trainingSet.items():
+        tfVector = extend(movieData[2], trainingSet)  # summary bag
         tfidfVector[movieID] = normalize(mult(tfVector, idfVector))
         print(i, ' movie(s) done')
         i+=1
-    return tfidfVector
+
+    trainingVectors = { key: value for key, value in tfidfVector.items() if trainingSet[key][-1] == False }
+    testingVectors = { key: value for key, value in tfidfVector.items() if trainingSet[key][-1] == True }
+
+    return trainingVectors, testingVectors
 
 def extend(bag, data):
     # Add empty entries for words to extend dimension of bag vector

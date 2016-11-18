@@ -95,7 +95,7 @@ def combineDict(dict1, dict2):
     output = {}
     for key, valList in dict1.items():
         newValList = valList.copy()
-        newValList += [dict2[key]]
+        newValList += [dict2[key], False]   # Bool is a placeholder
         output[key] = newValList
     return output
 

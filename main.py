@@ -8,22 +8,29 @@ print(len(movieData), 'movies imported')
 train, test = data.split(movieData, 80)
 print(len(train), 'training data\n', len(test), 'testing data')
 
-# # Create tfidf vectors for all summaries in the training set
-new = {}
+for key, value in test.items():
+    value[-1] = True
+
+# # Create tfidf vectors for all summaries
+newTrain = {}
 count = 0
 for key, val in train.items():
-    new[key] = val
-    count+=1
-    if count > 1000: break
+    newTrain[key] = val
+    count += 1
+    if count >= 500: break
 
-movieVectors = files.gettfidf(new)
-print(len(new), 'tfidf vectors calculated')
+newTest = {}
+count = 0
+for key, val in test.items():
+    newTest[key] = val
+    count += 1
+    if count >= 1: break
 
-# # Convert a test sample into tfidf
-tfidf.tfidf()
+trainVectors, testVectors = tfidf.tfidf(newTrain, newTest)
+print(len(trainVectors) + len(testVectors), 'tfidf vectors calculated')
 
 # # Apply kNN using cosine similarity
-# knn.kNN()
+# knn.kNN(trainVectors, testVectors)
 
 # # Output predicted genre
 # print()

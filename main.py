@@ -1,4 +1,5 @@
 import files, data, tfidf, knn
+import operator
 
 # # Import metadata and summaries' bag of words into separate dictionaries
 movieData = files.get()
@@ -6,7 +7,8 @@ print(len(movieData), 'movies imported')
 
 # # Split data into training/testing sets
 train, test = data.split(movieData, 80)
-print(len(train), 'training data\n', len(test), 'testing data')
+print(len(train), 'training data')
+print(len(test), 'testing data')
 
 for key, value in test.items():
     value[-1] = True
@@ -17,14 +19,14 @@ count = 0
 for key, val in train.items():
     newTrain[key] = val
     count += 1
-    if count >= 100: break
+    if count >= 1000: break
 
 newTest = {}
 count = 0
 for key, val in test.items():
     newTest[key] = val
     count += 1
-    if count >= 1: break
+    if count >= 5: break
 
 trainVectors, testVectors = tfidf.tfidf(newTrain, newTest)
 print(len(trainVectors) + len(testVectors), 'tfidf vectors calculated')
@@ -42,10 +44,12 @@ for key in testVectors:
             else:
                 genres[key][genre] = 1
 
-# final_genres = {}
-# for movieID, genreCounts in genres.items():
-#     for genre, count in genreCounts.items():
-#         if count > 1
-
 # # Output predicted genre
-print(genres)
+print('\nPredictions')
+top = 3
+for movieID, genreCounts in genres.items():
+    print(movieID, ':')
+    for _ in range(3):
+        print(max(genreCounts), genreCounts[max(genreCounts)])
+        genreCounts.pop(max(genreCounts))
+    print()

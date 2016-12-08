@@ -5,14 +5,14 @@ def tfidf(trainingSet, testingSet):
     trainingSet.update(testingSet)
     tfidfVector = {}
     idfVector = idf(trainingSet)
-    print(len(idfVector), ' unique words')
+    print(len(idfVector), 'unique words')
 
-    i = 1
+    i = 0
     for movieID, movieData in trainingSet.items():
         tfVector = extend(movieData[2], trainingSet)  # summary bag
         tfidfVector[movieID] = normalize(mult(tfVector, idfVector))
-        # print(i, ' movie(s) done')
-        i+=1
+        if i % 50 == 0: print(i, 'movie(s) done')
+        i += 1
 
     trainingVectors = { key: value for key, value in tfidfVector.items() if trainingSet[key][-1] == False }
     testingVectors = { key: value for key, value in tfidfVector.items() if trainingSet[key][-1] == True }

@@ -1,4 +1,4 @@
-import unicodedata, re, math
+import unicodedata, re, math, nltk
 
 def getMovieMetadata():
     # Open file in read mode with unicode encoding
@@ -26,12 +26,13 @@ def getMovieMetadata():
         if not len(movieLangs) == 1: continue
         if not 'United States of America' in movieOrigins: continue
         if not 'English Language' in movieLangs: continue
-        validGenre = False
-        for candidate in ['Action', 'Adventure', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Family', 'Romance', 'Thriller', 'Short Film']:
-            if candidate in movieGenres:
-                validGenre = True
-                break
-        if not validGenre: continue
+        # inValidGenre = False
+        # candidates = ['Action', 'Adventure', 'Comedy', 'Crime Fiction', 'Documentary', 'Drama', 'Family Film', 'Romance Film', 'Thriller', 'Short Film']
+        # for genre in movieGenres:
+        #     if not genre in candidates:
+        #         inValidGenre = True
+        #         break
+        # if inValidGenre: continue
 
         # Save useful metadata after changing encoding of title
         movieTitle = unicodedata.normalize('NFKD', movieTitle).encode('ascii','ignore').decode('ascii')
@@ -75,9 +76,19 @@ def fixDict(movieMetadata, movieSummaries):
 def bagOfWords(text):
     # Apply preprocessing
     text = re.sub('[^a-zA-Z]', ' ', text)
-    words = text.lower().split()
-    # stopWords = set(nltk.corpus.stopwords.words('english'))
-    # words = [w for w in words if w not in stopWords]
+    text = text.lower()
+
+    # Tokenize the text into words
+    tknzr = nltk.tokenize.RegexpTokenizer(r'\w+')
+    words = tknzr.tokenize(text)
+
+    # Remove all stop words
+    stopWords = set(nltk.corpus.stopwords.words('english'))
+    words = [w for w in words if w not in stopWords]
+
+    # Stem all words
+    stemr = nltk.stem.PorterStemmer()
+    words = [stemr.stem(w) for w in words]
 
     # Populate frequency dictionary 
     freqDict = {}

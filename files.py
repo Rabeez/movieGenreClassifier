@@ -39,18 +39,3 @@ def get():
         writeDict(movieSummariesBag, 'summariesBag')
 
         return data.combineDict(movieMetadata, movieSummariesBag)
-
-def gettfidf(trainingSet):
-    # Create native path representations for the files
-    tfidfFile = pathlib.Path('formattedData/tfidf.pkl')
-
-    # Load data from file if it exists
-    if tfidfFile.is_file():
-        return loadDict(tfidfFile)
-    else:
-        # Otherwise create vectors
-        vectors = tfidf.tfidf(trainingSet)
-        # And write them to the file
-        writeDict(vectors, 'tfidf')
-
-        return vectors

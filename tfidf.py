@@ -6,12 +6,14 @@ def tfidf(trainingSet, testingSet):
     tfidfVector = {}
     idfVector = idf(trainingSet)
     print(len(idfVector), 'unique words')
+    # print(idfVector)
 
     i = 0
     for movieID, movieData in trainingSet.items():
-        tfVector = extend(movieData[2], trainingSet)  # summary bag
-        tfidfVector[movieID] = normalize(mult(tfVector, idfVector))
-        if i % 50 == 0: print(i, 'movie(s) done')
+        tfVector = extend(normalize(movieData[2]), trainingSet)  # summary bag
+        # print(normalize(movieData[2]))
+        tfidfVector[movieID] = mult(tfVector, idfVector)
+        if i%50==0: print(i, 'movie(s) done')
         i += 1
 
     trainingVectors = { key: value for key, value in tfidfVector.items() if trainingSet[key][-1] == False }
@@ -30,7 +32,7 @@ def extend(bag, data):
 
 def normalize(bag):
     # Return unit vector of bag
-    return {key: val/len(bag) for key, val in bag.items()}
+    return {key: val/bag[max(bag, key=bag.get)] for key, val in bag.items()}
 
 def idf(data):
     # Calculate idf vector for the dataset
@@ -46,7 +48,7 @@ def idf(data):
                 allWordsdf[word] += 1
                 continue
 
-    return {word: math.log(len(data)/freq) for word, freq in allWordsdf.items()}
+    return {word: 1+math.log(len(data)/freq) for word, freq in allWordsdf.items()}
 
 def mult(tfVector, idfVector):
     # Return vector with products of corresponding entries in tf and idf vectors

@@ -15,7 +15,7 @@ def kNN(data, target, k=10):
         return k_nearest
 
 def cosine_similarity(v1, v2):
-    return (dot_product(v1, v2) / length(v1) * length(v2))
+    return (dot_product(v1, v2) / (length(v1) * length(v2)))
 
 def dot_product(v1, v2):
     s = 0

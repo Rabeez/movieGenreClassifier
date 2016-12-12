@@ -26,13 +26,14 @@ def getMovieMetadata():
         if not len(movieLangs) == 1: continue
         if not 'United States of America' in movieOrigins: continue
         if not 'English Language' in movieLangs: continue
-        # inValidGenre = False
-        # candidates = ['Action', 'Adventure', 'Comedy', 'Crime Fiction', 'Documentary', 'Drama', 'Family Film', 'Romance Film', 'Thriller', 'Short Film']
-        # for genre in movieGenres:
-        #     if not genre in candidates:
-        #         inValidGenre = True
-        #         break
-        # if inValidGenre: continue
+        inValidGenre = False
+        candidates = ['Action', 'Adventure', 'Comedy', 'Crime Fiction', 'Documentary', 'Drama', 'Family Film', 'Romance Film', 'Thriller', 'Short Film']
+        # candidates = ['Action', 'Adventure', 'Romance Film', 'Thriller', 'Crime Fiction', 'Drama', 'Documentary', 'Short Film']
+        for genre in movieGenres:
+            if not genre in candidates:
+                inValidGenre = True
+                break
+        if inValidGenre: continue
 
         # Save useful metadata after changing encoding of title
         movieTitle = unicodedata.normalize('NFKD', movieTitle).encode('ascii','ignore').decode('ascii')
@@ -59,6 +60,7 @@ def getMovieSummaries(movieMetadata):
                 stopCharFound = True
                 break
         if stopCharFound: continue
+        if len(movieSummary) < 500: continue
         movieSummary = re.sub('%', ' percent ', movieSummary)
         movieSummary = re.sub('[^a-zA-Z\d\s:;?.,"\'$!#+`\-]', ' ', movieSummary)
         movieSummary = unicodedata.normalize('NFKD', movieSummary).encode('ascii','ignore').decode('ascii')

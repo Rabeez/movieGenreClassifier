@@ -25,7 +25,7 @@ count = 0
 for key, val in test.items():
     newTest[key] = val
     count += 1
-    if count >= 5: break
+    if count >= 10: break
 
 # newTrain = {
 #     1: ['movie1', ['genre1'], {'the':1, 'game': 2, 'of':2, 'life':1, 'is':1, 'a':1, 'everlasting':1, 'learning': 1}, False]
@@ -45,7 +45,7 @@ print(len(trainVectors) + len(testVectors), 'tfidf vectors calculated')
 # # Apply kNN using cosine similarity
 genres = {}
 for key in testVectors:
-    k_nearest = knn.kNN(trainVectors, testVectors[key], 50)
+    k_nearest = knn.kNN(trainVectors, testVectors[key], 15)
     genres[key] = {}
     for movieID in k_nearest:
         temp_genres = movieData[movieID][1]
@@ -57,11 +57,10 @@ for key in testVectors:
 
 # # Output predicted genre
 print('\nPredictions')
-top = 10
-# print(genres)
 for movieID, genreCounts in genres.items():
     print(movieID, ':')
-    for _ in range(top):
+    l = len(genreCounts)
+    for _ in range(l):
         if genreCounts:
             print(max(genreCounts, key=genreCounts.get), genreCounts[max(genreCounts, key=genreCounts.get)])
             genreCounts.pop(max(genreCounts, key=genreCounts.get))

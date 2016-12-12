@@ -5,6 +5,7 @@ def getMovieMetadata():
     metadataFile = open('rawData/movie.metadata.tsv', 'r', encoding='utf8').readlines()
 
     movieMetadata = {}
+    # candidates = {'Action': 0, 'Adventure': 0, 'Comedy': 0, 'Crime Fiction': 0, 'Documentary': 0, 'Drama': 0, 'Family Film': 0, 'Romance Film': 0, 'Thriller': 0, 'Short Film': 0}
     for movie in metadataFile:  # Loop over all lines (movies) in file
         # Extract basic information for storage
         movieID = movie.split('\t')[0]
@@ -26,9 +27,8 @@ def getMovieMetadata():
         if not len(movieLangs) == 1: continue
         if not 'United States of America' in movieOrigins: continue
         if not 'English Language' in movieLangs: continue
-        inValidGenre = False
-        candidates = ['Action', 'Adventure', 'Comedy', 'Crime Fiction', 'Documentary', 'Drama', 'Family Film', 'Romance Film', 'Thriller', 'Short Film']
-        # candidates = ['Action', 'Adventure', 'Romance Film', 'Thriller', 'Crime Fiction', 'Drama', 'Documentary', 'Short Film']
+        inValidGenre = False 
+        candidates = ['Thriller', 'Drama', 'Comedy']
         for genre in movieGenres:
             if not genre in candidates:
                 inValidGenre = True
@@ -47,6 +47,7 @@ def getMovieSummaries(movieMetadata):
 
     movieSummaries = {}
     movieSummariesBag = {}
+    genreCounts = {}
     for movie in summariesFile:  # Loop over all lines (summaries) in file
         # Extract information for storage
         movieID = movie.split('\t')[0]
@@ -61,6 +62,23 @@ def getMovieSummaries(movieMetadata):
                 break
         if stopCharFound: continue
         if len(movieSummary) < 500: continue
+
+        # Genre counter
+        movieGenres = [genreName for genreName in movieMetadata[movieID][1]]
+        for genre in movieGenres:
+            if genre in genreCounts:
+                genreCounts[genre] += 1
+            else:
+                genreCounts[genre] = 1
+
+        # Genre cap
+        skipping = False
+        for genre in movieGenres:
+            if genreCounts[genre] > 100:
+                skipping = True
+                break
+        if skipping: continue
+
         movieSummary = re.sub('%', ' percent ', movieSummary)
         movieSummary = re.sub('[^a-zA-Z\d\s:;?.,"\'$!#+`\-]', ' ', movieSummary)
         movieSummary = unicodedata.normalize('NFKD', movieSummary).encode('ascii','ignore').decode('ascii')
@@ -69,6 +87,7 @@ def getMovieSummaries(movieMetadata):
         movieSummaries[movieID] = movieSummary
         movieSummariesBag[movieID] = bagOfWords(movieSummary)
 
+    print(genreCounts)
     return movieSummaries, movieSummariesBag
 
 def fixDict(movieMetadata, movieSummaries):

@@ -30,8 +30,11 @@ def get():
     else:
         # Otherwise import data from the corpus
         movieMetadata = data.getMovieMetadata()
+        print(len(movieMetadata))
         movieSummaries, movieSummariesBag = data.getMovieSummaries(movieMetadata)
+        print(len(movieSummaries))
         movieMetadata = data.fixDict(movieMetadata, movieSummaries)
+        print(len(movieMetadata), len(movieSummaries))
 
         # And write it to the files
         writeDict(movieMetadata, 'metadataDict')
